@@ -9,5 +9,6 @@ const userAvatarRoutes = Router();
 const upload = multer(MULTER);
 
 userAvatarRoutes.patch("/:id", upload.single("avatar"), userAvatarController.update);
+userAvatarRoutes.get("/:id", userAvatarController.show);
 
 module.exports = userAvatarRoutes;

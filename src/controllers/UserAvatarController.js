@@ -29,6 +29,22 @@ class UserAvatarController {
     } catch (err) {
       next(err);
     }
+  };
+
+  async show(request, response, next) {
+    try {
+      const { id } = request.params;
+
+      const avatarFileName = await knex("users").select("avatar").where({ id }).first();
+
+      if (!avatarFileName) {
+        throw new AppError("Foto de perfil inexistente");
+      };
+
+      return response.json(avatarFileName);
+    } catch (err) {
+      next(err);
+    };
   }
 };
 
