@@ -5,7 +5,7 @@ class MovieNotesController {
   async create(request, response, next) {
     try {
       const { title, description, rating, tags } = request.body;
-      const { user_id } = request.params;
+      const user_id = request.user.id;
 
       if (rating > 5 || rating < 0) {
         throw new AppError("A avaliação deve estar entre 0 e 5");
@@ -63,9 +63,9 @@ class MovieNotesController {
   }
 
   async index(request, response) {
-    const { user_id, title, tags } = request.query;
+    const { title, tags } = request.query;
+    const user_id = request.user.id;
 
-    console.log(user_id, title, tags);
     let notes;
 
     if (tags) {
@@ -88,7 +88,7 @@ class MovieNotesController {
     const notesWithTags = notes.map((note) => {
       const noteTags = userTags.filter((tag) => tag.note_id === note.id);
       return {
-        ...notes,
+        ...note,
         tags: noteTags,
       };
     });

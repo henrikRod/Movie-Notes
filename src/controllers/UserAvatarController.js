@@ -5,7 +5,7 @@ const DiskStorage = require("../providers/DiskStorage");
 class UserAvatarController {
   async update(request, response, next) {
     try {
-      const { id } = request.params;
+      const id = request.user.id;
       const avatarFileName = request.file.filename;
 
       const diskStorage = new DiskStorage();
@@ -33,7 +33,7 @@ class UserAvatarController {
 
   async show(request, response, next) {
     try {
-      const { id } = request.params;
+      const id = request.user.id;
 
       const avatarFileName = await knex("users").select("avatar").where({ id }).first();
 
