@@ -3,16 +3,27 @@ const knex = require("../database/knex");
 const AppError = require("../utils/AppError");
 
 class UsersController {
-  async create(request, response) {
+  async create(request, response, next) {
     const { name, email, password } = request.body;
-    const hashedPassword = await hash(password, 8);
-    await knex("users").insert({
-      name: name,
-      email: email,
-      password: hashedPassword,
-    });
-    return response.json({ name, email, password });
-  }
+
+    try {
+      const userExists = await knex("users").where({ email }).first();
+
+      if (userExists) {
+        throw new AppError("Usuário já existe");
+      };
+
+      const hashedPassword = await hash(password, 8);
+      await knex("users").insert({
+        name: name,
+        email: email,
+        password: hashedPassword,
+      });
+      return response.json({ name, email, password });
+    } catch (err) {
+      next(err);
+    };
+  };
 
   async update(request, response, next) {
     try {
