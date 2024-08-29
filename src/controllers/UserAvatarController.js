@@ -14,11 +14,11 @@ class UserAvatarController {
 
       if (!user) {
         throw new AppError("Usuário não encontrado");
-      };
+      }
 
       if (user.avatar) {
         await diskStorage.deleteFile(user.avatar);
-      };
+      }
 
       const fileName = await diskStorage.saveFile(avatarFileName);
       user.avatar = fileName;
@@ -29,7 +29,8 @@ class UserAvatarController {
     } catch (err) {
       next(err);
     }
-  };
+  }
+
 
   async show(request, response, next) {
     try {
